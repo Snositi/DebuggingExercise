@@ -11,8 +11,7 @@ namespace HelloWorld
         int _playerHealth = 120;
         int _playerDamage = 20;
         int _playerDefense = 20;
-        int levelScaleMax = 5;        
-        int _turnCount = 0;
+        int levelScaleMax = 5; 
         //Run the game
         public void Run()
         {
@@ -90,20 +89,25 @@ namespace HelloWorld
                         Console.ReadKey();
 
                     }
+                    if (enemyHealth <= 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(enemyName + " has fallen, their body burns away leaving a gold token with a dollar sign embedded onto it");
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey();
+                    }
                 }
                 //If the player decides to defend the enemy just takes their turn. However this time the block attack function is
                 //called instead of simply decrementing the health by the enemy's attack value.
-                if (input == '2')
+                else if (input == '2')
                 {
                     BlockAttack(_playerHealth, enemyAttack, _playerDefense);
-                    Console.WriteLine(enemyName + " dealt " + enemyAttack + " damage.But you blocked " + _playerDefense );
+                    Console.WriteLine(enemyName + " dealt " + enemyAttack + " damage.But you blocked " + _playerDefense);
                     Console.Write("> ");
                     Console.ReadKey();
                     turnCount++;
                     Console.Clear();
-                }
-                else
-                Console.Clear();                
+                }                
             }
             //Return whether or not our player died
             return _playerHealth != 0;
@@ -163,7 +167,7 @@ namespace HelloWorld
                     Console.Clear();
                     exit = true;
                 }
-                if (input == '2')
+                else if (input == '2')
                 {
                     _playerDefense += option2int;
                     Console.WriteLine("You just bought " + option2 + "!");
@@ -195,6 +199,7 @@ namespace HelloWorld
                 Console.WriteLine("2." + option2);
                 Console.Write("> ");
                 input = Console.ReadKey().KeyChar;
+                Console.Clear();
             }
         }
         void GetInput(out char input, string option1, string option2, string query)
