@@ -11,13 +11,39 @@ namespace HelloWorld
         int _playerHealth = 120;
         int _playerDamage = 20;
         int _playerDefense = 20;
-        int levelScaleMax = 5; 
+        int levelScaleMax = 5;
+        Random random;
         //Run the game
         public void Run()
         {
             Start();
-            while (_gameOver == false)
+            char input;
+            Console.WriteLine("Are ya feeling lucky "+ _playerName +"?");
+            GetInput(out input, "Flip Coin", "Not Really");
+            if (input == '1')
             {
+                random = new Random();
+                int randomNumber = random.Next(0, 1000);
+                if (randomNumber >= 500)
+                {
+                    Console.WriteLine("Heads, you live, for now, now scurry through that door");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else
+                {
+                    Console.WriteLine("Tails, ooooh. yeah, so begone!");
+                    Console.ReadKey();
+                    _gameOver = true;
+                }
+            }
+            else if (input == '2')
+            {
+                Console.WriteLine("Coward");
+                Console.ReadKey();
+            }
+            while (_gameOver == false)
+            {                
                 Update();
             }
             End();
@@ -33,29 +59,30 @@ namespace HelloWorld
             string enemyName = "";
             //Changes the enemy's default stats based on our current room number. 
             //This is how we make it seem as if the player is fighting different enemies
+            random = new Random();
             switch (roomNum)
             {
                 case 0:
                     {
-                        enemyHealth = 100;
-                        enemyAttack = 20;
-                        enemyDefense = 5;
+                        enemyHealth = random.Next(60, 80);
+                        enemyAttack = random.Next(30,65);
+                        enemyDefense = random.Next(3,15);
                         enemyName = "Wizard";
                         break;
                     }
                 case 1:
                     {
-                        enemyHealth = 80;
-                        enemyAttack = 30;
-                        enemyDefense = 5;
+                        enemyHealth = random.Next(130,200);
+                        enemyAttack = random.Next(25,40);
+                        enemyDefense = random.Next(10, 20);
                         enemyName = "Troll";
                         break;
                     }
                 case 2:
                     {
                         
-                        enemyHealth = 200;
-                        enemyAttack = 40;
+                        enemyHealth = random.Next(200,300);
+                        enemyAttack = random.Next(40,90);
                         enemyDefense = 10;
                         enemyName = "Giant";
                         break;
@@ -108,6 +135,10 @@ namespace HelloWorld
                     turnCount++;
                     Console.Clear();
                 }                
+            } if (_gameOver = true || _playerHealth <= 0)
+            {
+                _gameOver = true;
+                _playerHealth = 0;
             }
             //Return whether or not our player died
             return _playerHealth != 0;
@@ -146,17 +177,18 @@ namespace HelloWorld
             _playerDamage += 10 * scale;
             _playerDefense *= scale;             
         }
-        void UpgradeStats(string option1, int option1int, string option2, int option2int)
+        void UpgradeStats(string option1, int option1int, string option2, int option2int,string option3)
         {
             bool exit = false;
             while (exit == false)
             {
                 Console.Clear();
                 Console.WriteLine("ShopKeep: Welcome to my shop, traveler!");
-                Console.WriteLine("Would you prefer " + option1 + " or " + option2);
+                Console.WriteLine("Would you prefer " + option1 + " or " + option2 + " or " + option3);
                 char input = ' ';
                 Console.WriteLine("1. " + option1);
                 Console.WriteLine("2. " + option2);
+                Console.WriteLine("3. " + option3);
                 input = Console.ReadKey().KeyChar;
                 if (input == '1')
                 {
@@ -176,7 +208,48 @@ namespace HelloWorld
                     Console.Clear();
                     exit = true;
                 }
-                else if (input != '1' && input != '2')
+                else if (input == '3')
+                {
+                    int gambletiermultiplier = random.Next(1,10);
+                    gambletiermultiplier /= 10;
+                    int gambletierone = random.Next(0,9);
+                    if (gambletierone == 0)
+                    {
+                        Console.WriteLine("Fate has decided to increase your health by " + gambletiermultiplier + "%");                        
+                        Console.WriteLine("You previously " + _playerHealth + "which is now");
+                        int multiplyingint = _playerHealth *= gambletiermultiplier;
+                        _playerHealth += multiplyingint;
+                        Console.Write(_playerHealth);
+                        Console.ReadKey();
+                        exit = true;
+                    }
+                    else if (gambletierone == 1)
+                    {
+                        Console.WriteLine("Fate has decided to increase your damage by " + gambletiermultiplier + "%");                        
+                        Console.WriteLine("You previously had " + _playerDamage + " player damage which is now");
+                        int multiplyingint = _playerDamage *= gambletiermultiplier;
+                        _playerDamage += multiplyingint;
+                        Console.Write(_playerDamage);
+                        Console.ReadKey();
+                        exit = true;
+                    }
+                    else if (gambletierone >= 2 && gambletierone <= 5)
+                    {
+                        Console.WriteLine("Unfortunate you weren't lucky enough to increase, but lucky enough to live");
+                        Console.ReadKey();
+                        exit = true;
+                    }
+                    else if (gambletierone >= 6 && gambletierone <=9)
+                    {
+                        Console.WriteLine("Unfortunately fate has decided this is where you die");
+                        _gameOver = true;
+                        _playerHealth = 0;
+                        Console.ReadKey();
+                    }
+                    else
+                        Console.WriteLine("THERE WAS ERROR");
+                }
+                else if (input != '1' && input != '2' && input != '3')
                 {
                     Console.Clear();
                     Console.WriteLine("Invalid option");
@@ -255,12 +328,14 @@ namespace HelloWorld
             }
             int turnCount = 0;
             //Starts a battle. If the player survived the battle, level them up and then proceed to the next room.
-            if(StartBattle(roomNum, ref turnCount))
-            {
-                UpgradeStats(turnCount);
-                UpgradeStats("100 health", 100, "20 defense",20);
-                ClimbLadder(roomNum+1);
-            }
+           
+                if (StartBattle(roomNum, ref turnCount))
+                {
+                    UpgradeStats(turnCount);
+                    UpgradeStats("100 health", 100, "20 defense", 20, "tempt fate with the coin");
+                    ClimbLadder(roomNum + 1);
+                }
+            
             _gameOver = true;
 
         }
@@ -333,20 +408,35 @@ namespace HelloWorld
         //Repeated until the game ends
         public void Update()
         {
-            ClimbLadder(0);   
+            if (_playerHealth > 0 || _gameOver == false)
+            {
+                ClimbLadder(0);
+            }   
         }
 
         //Performed once when the game ends
         public void End()
         {
             //If the player died print death message
-            if(_playerHealth <= 0)
+            if (_playerHealth <= 0)
             {
                 Console.WriteLine("Failure");
                 return;
             }
+            else if (_gameOver == true)
+            {
+                Console.WriteLine("UNLUCKY");
+                Console.ReadKey();
+            }
             //Print game over message
             Console.WriteLine("Congratulations");
-        }        
+        } 
+        struct Player
+        {
+            public int health;
+            public float speed;
+            public bool isAlive;
+            public string name;
+        }
     }
 }
