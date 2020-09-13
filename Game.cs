@@ -30,10 +30,10 @@ namespace HelloWorld
     {
         public string abilityName;
         public int abilitydamage;
-        public int abilityregen;
-        public int abilityuses;
+        public int abilityregen;        
         public int abilitydefense;
-        public int hitpercentage;
+        public int hitchance;
+        public int damagerecieved;
     }
 
     class Game
@@ -48,6 +48,31 @@ namespace HelloWorld
         Item armor;
         Item healthpotion;
         Item cheapshot;
+        Ability SureSwing;
+        Ability HonorableSheild;
+        Ability Rest;
+        Ability BlindRage;
+        Ability LowBlow;
+        Ability MiniShield;
+        Ability GnomeTrick;
+        Ability GnomePower;
+        Ability TrollSmash;
+        Ability TrollSkin;
+        Ability TrollHeal;
+        Ability TrollLeapSmash;
+        Ability SnositiPain;
+        Ability SnositiWeakness;
+        Ability SnositiLifeSteal;
+        Ability SnositiOmegaCannon;
+        Ability SunBurn;
+        Ability HeatSheild;
+        Ability StarsNeverDie;
+        Ability SuperNova;
+        Ability SkeletonMinionSmack;
+        Ability SkeletonMinionLoyalty;
+        Ability SkeletonAbsorbMinion;
+        Ability SkeletionGiant;
+
 
         //Run the game
         public void Run()
@@ -372,7 +397,7 @@ namespace HelloWorld
         {
             pvpintro();
             
-            while ()
+            while (player1.hasgameendingcoin == false && player2.hasgameendingcoin == false)
             {
 
             }
@@ -402,6 +427,19 @@ namespace HelloWorld
                             player1._defense = 20;
                             player1._damage = 40;
                             player1._speed = 20;
+                            SureSwing.abilitydamage = 8;
+                            SureSwing.abilityName = "Knight LongSword";
+                            SureSwing.hitchance = 8;
+                            HonorableSheild.abilitydefense = 10;                            
+                            HonorableSheild.abilityName = "Knights Sheild";
+                            HonorableSheild.hitchance = 7;
+                            Rest.abilityregen = 7;
+                            Rest.abilityName = "Catch Breath";
+                            Rest.hitchance = 7;
+                            BlindRage.abilitydamage = 13;
+                            BlindRage.abilityName = "Visor Down Beyblade action";
+                            BlindRage.hitchance = 0;                            
+                            //  0-9 so 0 is 10% call random number if hitchance or lower then attack if else then miss
                             break;
                         }
                     case '2':
@@ -411,6 +449,18 @@ namespace HelloWorld
                             player1._defense = 10;
                             player1._damage = 70;
                             player1._speed = 30;
+                            LowBlow.abilitydamage = 7;
+                            LowBlow.abilityName = "From the ground up!";
+                            LowBlow.hitchance = 8;
+                            MiniShield.abilitydefense = 6;
+                            MiniShield.abilityName = "Tiny Sheild!";
+                            MiniShield.hitchance = 7;
+                            GnomeTrick.abilityregen = 14;
+                            GnomeTrick.abilityName = "Gnome Coin Flip";
+                            GnomeTrick.hitchance = 4;
+                            GnomePower.abilitydamage = 20;
+                            GnomePower.abilityName = "Gnome Assault";
+                            GnomePower.hitchance = 2;
                             break;
                         }
                     case '3':
@@ -525,6 +575,8 @@ namespace HelloWorld
                 }
                 else if (player1._health > 0 && player2._health > 0 && singleplayer == false)
                 {
+                    player1.hasgameendingcoin = false;
+                    player2.hasgameendingcoin = false;
                     PlayerVersusPlayer();
                 }
             }
