@@ -4,55 +4,56 @@ using System.Text;
 
 namespace HelloWorld
 {
+    //Create a turn based PvP game. It should have a battle loop where both players
+    //must fight until one is dead. The game should allow players to upgrade their stats
+    //using items. Both players and items should be defined as structs. 
+
+    struct Player
+    {
+        public int _health;
+        public int _damage;
+        public int _defense;        
+        public float _speed;
+        public bool _isAlive;
+        public string _name;
+        public bool hasgameendingcoin;
+    }
+
+    struct Item
+    {
+        public string itemname;
+        public int damage;
+        public int armor;
+        public float healthregen;
+    }
+    struct Ability
+    {
+        public string abilityName;
+        public int abilitydamage;
+        public int abilityregen;
+        public int abilityuses;
+        public int abilitydefense;
+        public int hitpercentage;
+    }
+
     class Game
     {
-        bool _gameOver = false;
-                
+        bool _gameOver = false;                
         int levelScaleMax = 5;
         Random random;
-        struct Player
-        {
-            public int health;
-            public int damage;
-            public int defense;
-            public float speed;
-            public bool isAlive;
-            public string name;
-        }
-        Player player1;        
+        Player player1;
+        Player player2;
+        Item gameOverToken;
+        Item winnersToken;
+        Item armor;
+        Item healthpotion;
+        Item cheapshot;
+
         //Run the game
         public void Run()
         {
-            player1.health = 120;
-            player1.damage = 20;
-            player1.defense = 20;
-            string player1.name = "Hero";
-            Start();
-            char input;
-            Console.WriteLine("Are ya feeling lucky "+ player1.name +"?");
-            GetInput(out input, "Flip Coin", "Not Really");
-            if (input == '1')
-            {
-                random = new Random();
-                int randomNumber = random.Next(0, 1000);
-                if (randomNumber >= 500)
-                {
-                    Console.WriteLine("Heads, you live, for now, now scurry through that door");
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-                else
-                {
-                    Console.WriteLine("Tails, ooooh. yeah, so begone!");
-                    Console.ReadKey();
-                    _gameOver = true;
-                }
-            }
-            else if (input == '2')
-            {
-                Console.WriteLine("Coward");
-                Console.ReadKey();
-            }
+            InitializePlayer();
+            Start();            
             while (_gameOver == false)
             {                
                 Update();
@@ -101,10 +102,10 @@ namespace HelloWorld
             }
 
             //Loops until the player or the enemy is dead
-            while(player1.health > 0 && enemyHealth > 0)
+            while(player1._health > 0 && enemyHealth > 0)
             {
                 //Displays the stats for both charactersa to the screen before the player takes their turn
-                PrintStats(player1.name, player1.health, player1.damage, player1.defense);
+                PrintStats(player1._name, player1._health, player1._damage, player1._defense);
                 PrintStats(enemyName, enemyHealth, enemyAttack, enemyDefense);
 
                 //Get input from the player
@@ -114,14 +115,14 @@ namespace HelloWorld
                 if (input == '1')
                 {
                     Attack(ref enemyHealth, enemyDefense);
-                    Console.WriteLine("You dealt " + player1.damage + " damage. But " + enemyName + " blocked " + enemyDefense + "!");
+                    Console.WriteLine("You dealt " + player1._damage + " damage. But " + enemyName + " blocked " + enemyDefense + "!");
                     Console.Write("> ");
                     turnCount++;
                     Console.ReadKey();
                     //After the player attacks, the enemy takes its turn. Since the player decided not to defend, the block attack function is not called.
                     if (enemyHealth > 0)
                     {
-                        player1.health -= enemyAttack;
+                        player1._health -= enemyAttack;
                         Console.WriteLine(enemyName + " dealt " + enemyAttack + " damage.");
                         Console.Write("> ");
                         Console.ReadKey();
@@ -139,35 +140,35 @@ namespace HelloWorld
                 //called instead of simply decrementing the health by the enemy's attack value.
                 else if (input == '2')
                 {
-                    BlockAttack(player1.health, enemyAttack, player1.defense);
-                    Console.WriteLine(enemyName + " dealt " + enemyAttack + " damage.But you blocked " + player1.defense);
+                    BlockAttack(player1._health, enemyAttack, player1._defense);
+                    Console.WriteLine(enemyName + " dealt " + enemyAttack + " damage.But you blocked " + player1._defense);
                     Console.Write("> ");
                     Console.ReadKey();
                     turnCount++;
                     Console.Clear();
                 }                
-            } if (_gameOver = true || player1.health <= 0)
+            } if (_gameOver = true || player1._health <= 0)
             {
                 _gameOver = true;
-                player1.health = 0;
+                player1._health = 0;
             }
             //Return whether or not our player died
-            return player1.health != 0;
+            return player1._health != 0;
 
         }
         //Decrements the health of a character. The attack value is subtracted by that character's defense
-        void BlockAttack(int _opponentHealth, int attackVal, int player1.defense)
+        void BlockAttack(int _opponentHealth, int attackVal, int playerdefense)
         {
-            int damage = attackVal - player1.defense;
-            if(damage < 0)
+            int damage = attackVal - playerdefense;
+            if (damage < 0)
             {
                 damage = 0;
             }
-            player1.health -= damage;
+            player1._health -= damage;
         }
         void Attack(ref int _opponentHeatlh, int opponentDefense)
         {
-            int damage = player1.damage - opponentDefense;
+            int damage = player1._damage - opponentDefense;
             if(damage<0)
             {
                 damage = 0;
@@ -184,9 +185,9 @@ namespace HelloWorld
             {
                 scale = 1;
             }
-            player1.health += 10 * scale;
-            player1.damage += 10 * scale;
-            player1.defense *= scale;             
+            player1._health += 10 * scale;
+            player1._damage += 10 * scale;
+            player1._defense *= scale;             
         }
         void UpgradeStats(string option1, int option1int, string option2, int option2int,string option3)
         {
@@ -203,7 +204,7 @@ namespace HelloWorld
                 input = Console.ReadKey().KeyChar;
                 if (input == '1')
                 {
-                    player1.health += option1int;
+                    player1._health += option1int;
                     Console.WriteLine("You just bought " + option1 + "!");
                     Console.WriteLine("Goodbye!!");
                     Console.ReadKey();
@@ -212,7 +213,7 @@ namespace HelloWorld
                 }
                 else if (input == '2')
                 {
-                    player1.defense += option2int;
+                    player1._defense += option2int;
                     Console.WriteLine("You just bought " + option2 + "!");
                     Console.WriteLine("Goodbye!!");
                     Console.ReadKey();
@@ -227,20 +228,20 @@ namespace HelloWorld
                     if (gambletierone == 0)
                     {
                         Console.WriteLine("Fate has decided to increase your health by " + gambletiermultiplier + "%");                        
-                        Console.WriteLine("You previously " + player1.health + "which is now");
-                        int multiplyingint = player1.health *= gambletiermultiplier;
-                        player1.health += multiplyingint;
-                        Console.Write(player1.health);
+                        Console.WriteLine("You previously " + player1._health + "which is now");
+                        int multiplyingint = player1._health *= gambletiermultiplier;
+                        player1._health += multiplyingint;
+                        Console.Write(player1._health);
                         Console.ReadKey();
                         exit = true;
                     }
                     else if (gambletierone == 1)
                     {
                         Console.WriteLine("Fate has decided to increase your damage by " + gambletiermultiplier + "%");                        
-                        Console.WriteLine("You previously had " + player1.damage + " player damage which is now");
-                        int multiplyingint = player1.damage *= gambletiermultiplier;
-                        player1.damage += multiplyingint;
-                        Console.Write(player1.damage);
+                        Console.WriteLine("You previously had " + player1._damage + " player damage which is now");
+                        int multiplyingint = player1._damage *= gambletiermultiplier;
+                        player1._damage += multiplyingint;
+                        Console.Write(player1._damage);
                         Console.ReadKey();
                         exit = true;
                     }
@@ -254,7 +255,7 @@ namespace HelloWorld
                     {
                         Console.WriteLine("Unfortunately fate has decided this is where you die");
                         _gameOver = true;
-                        player1.health = 0;
+                        player1._health = 0;
                         Console.ReadKey();
                     }
                     else
@@ -351,6 +352,32 @@ namespace HelloWorld
 
         }
 
+        void pvpintro()
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to player versus player!");
+            Console.WriteLine("Rules are simple, you have 4 abilities,");
+            Console.WriteLine("This game continues till the winner buys an exit coin");
+            Console.WriteLine("Got it?");
+            Console.WriteLine("1. Yea");
+            Console.WriteLine("2. No");
+            Console.Write("> ");
+            Console.ReadKey();
+            Console.WriteLine("of course you do");
+            Console.WriteLine("Press any key to begin");
+            Console.ReadKey();
+            Console.Clear();
+        }
+        void PlayerVersusPlayer()
+        {
+            pvpintro();
+            
+            while ()
+            {
+
+            }
+        }
+
         //Displays the character selection menu. 
         void SelectCharacter()
         {
@@ -370,26 +397,29 @@ namespace HelloWorld
                 {
                     case '1':
                         {
-                            player1.name = "Sir Kibble";
-                            player1.health = 120;
-                            player1.defense = 20;
-                            player1.damage = 40;
+                            player1._name = "Sir Kibble";
+                            player1._health = 120;
+                            player1._defense = 20;
+                            player1._damage = 40;
+                            player1._speed = 20;
                             break;
                         }
                     case '2':
                         {
-                            player1.name = "Gnojoel";
-                            player1.health = 40;
-                            player1.defense = 10;
-                            player1.damage = 70;
+                            player1._name = "Gnojoel";
+                            player1._health = 40;
+                            player1._defense = 10;
+                            player1._damage = 70;
+                            player1._speed = 30;
                             break;
                         }
                     case '3':
                         {
-                            player1.name = "Joedazz";
-                            player1.health = 200;
-                            player1.defense = 30;
-                            player1.damage = 25;
+                            player1._name = "Joedazz";
+                            player1._health = 200;
+                            player1._defense = 30;
+                            player1._damage = 25;
+                            player1._speed = 10;
                             break;
                         }
                         //If an invalid input is selected display and input message and input over again.
@@ -402,9 +432,54 @@ namespace HelloWorld
                         }
                 }
                 Console.Clear();
+                Console.WriteLine("Please select a second player to join you");
+                Console.WriteLine("1. Snositi");
+                Console.WriteLine("2. Sentient Mass of Light");
+                Console.WriteLine("3. Necromancer");
+                Console.Write("> ");
+                char playerTwoOption = ' ';
+                while (playerTwoOption != '1' && playerTwoOption != '2' && playerTwoOption !='3')
+                {
+                    playerTwoOption = Console.ReadKey().KeyChar;
+                    switch (playerTwoOption)
+                    {
+                        case '1':
+                            player2._health = 100;
+                            player2._damage = 36;
+                            player2._defense = 27;
+                            player2._isAlive = true;
+                            player2._name = "Snosit";
+                            player2._speed = 69;
+                            break;
+                        case '2':
+                            player2._health = 1000;
+                            player2._damage = 1000;
+                            player2._defense = 1000;
+                            player2._isAlive = true;
+                            player2._name = "SentientMass of light";
+                            player2._speed = 5;
+                            break;
+                        case '3':
+                            player2._health = 80;
+                            player2._damage = 50;
+                            player2._defense = 0;
+                            player2._isAlive = true;
+                            player2._name = "Necromancer";
+                            player2._speed = 35;
+                            break;
+                        default:
+                                Console.WriteLine("Invalid input. Press any key to continue.");
+                                Console.Write("> ");
+                                Console.ReadKey();
+                                break;
+                    }
+                    Console.WriteLine("> ");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
             }
             //Prints the stats of the choosen character to the screen before the game begins to give the player visual feedback
-            PrintStats(player1.name,player1.health,player1.damage,player1.defense);
+            PrintStats(player1._name, player1._health, player1._damage, player1._defense);
             Console.WriteLine("Press any key to continue.");
             Console.Write("> ");
             Console.ReadKey();
@@ -413,23 +488,53 @@ namespace HelloWorld
         //Performed once when the game begins
         public void Start()
         {
+            Player player1;
+            Player player2;
             SelectCharacter();
+            Gamble();
         }
 
         //Repeated until the game ends
         public void Update()
         {
-            if (player1.health > 0 || _gameOver == false)
+            bool singleplayer = true;
+            Console.WriteLine("Would you like to participate in the multiplayer feature or singleplayer?");
+            Console.WriteLine("*Player 2 will not participate at all in singleplayer*");
+            Console.WriteLine("1. SinglePlayer");
+            Console.WriteLine("2. Multiplayer");
+            Console.Write("> ");
+            char input = '6';
+            while (input != '1' && input != '2')
             {
-                ClimbLadder(0);
-            }   
+                input = Console.ReadKey().KeyChar;
+                switch (input)
+                {
+                    case '1':
+                        singleplayer = true;
+                        break;
+                    case '2':
+                        singleplayer = false;
+                        break;
+                    default:
+                        Console.WriteLine("Please select a valid option ");
+                        break;
+                }
+                if (player1._health > 0 && singleplayer == true)
+                {
+                    ClimbLadder(0);
+                }
+                else if (player1._health > 0 && player2._health > 0 && singleplayer == false)
+                {
+                    PlayerVersusPlayer();
+                }
+            }
         }
 
         //Performed once when the game ends
         public void End()
         {
             //If the player died print death message
-            if (player1.health <= 0)
+            if (player1._health <= 0)
             {
                 Console.WriteLine("Failure");
                 return;
@@ -441,7 +546,45 @@ namespace HelloWorld
             }
             //Print game over message
             Console.WriteLine("Congratulations");
-        } 
+        }
+        void InitializePlayer()
+        {
+            player1._health = 69420;
+            player1._damage = 69420;
+            player1._defense = 69420;
+            player1._name = "UNDEFINED";
+        }
+        void Gamble()
+        {
+            char input;
+            Console.WriteLine("Are ya feeling lucky " + player1._name + "?");
+            GetInput(out input, "Flip Coin", "Not Really");
+            if (input == '1')
+            {
+                random = new Random();
+                int randomNumber = random.Next(0, 1000);
+                if (randomNumber >= 500)
+                {
+                    Console.WriteLine("Heads, huh, that doesn't happen often, ok well here's bonus damage I suppose.");
+                    player1._damage += 15;
+                    Console.WriteLine("You gained 15 damage points for a total of " + player1._damage + "!");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else
+                {
+                    Console.WriteLine("Tails, ooooh. big bummer bro good luck but im taking your shoes");
+                    Console.WriteLine("*Removed shoes");
+                    Console.WriteLine("-5 defense");
+                    Console.ReadKey();
+                }
+            }
+            else if (input == '2')
+            {
+                Console.WriteLine("Coward");
+                Console.ReadKey();
+            }
+        }
         
     }
 }
