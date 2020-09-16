@@ -35,7 +35,9 @@ namespace HelloWorld
             if (singlePlayer == false)
             {
                 _player1 = CreateCharacter();
+                SelectItems(_player1);
                 _player2 = CreateCharacter();
+                SelectItems(_player2);
                 MultiplayerStart();
             }
             else if (singlePlayer == true)
@@ -480,36 +482,26 @@ namespace HelloWorld
 
         public void SelectItems(Player player)
         {
+            player.Printstats();
             char input;
             GetInput(out input, "LongSword", "Dagger", "Welcome! Please choose a weapon.");
             if (input == '1')
             {
-                _player1.EquipItem(longsword);
+                player.EquipItem(longsword);
             }
             else if (input == '2')
             {
-                _player1.EquipItem(dagger);
+                player.EquipItem(dagger);
             }
-            Console.WriteLine("Player one stats");
-            // player1.PrintStats();
-            GetInput(out input, "LongSword", "Dagger", "Welcome! Please choose a weapon.");
-            if (input == '1')
-            {
-                _player2.EquipItem(longsword);
-            }
-            else if (input == '2')
-            {
-                _player2.EquipItem(dagger);
-            }
-            Console.WriteLine("Player two stats");
-            //   player1.PrintStats();
+            Console.WriteLine("Player stats");
+            player.Printstats();
+            
         }
         public Player CreateCharacter()
         {
             Console.WriteLine("Hello, please type your name.");
             string name = Console.ReadLine();
             Player player = new Player(name, 100, 5, 3);
-            SelectItems(player);
             return player;
         }
         void isMultiplayer()
