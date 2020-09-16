@@ -6,51 +6,51 @@ namespace HelloWorld
 {
     class Player
     {
-        private string name;
-        private int health;
-        private int damage;
-        private int defense;
+        private string _name;
+        private int _health;
+        private int _damage;
+        private int _defense;
         public Player()
         {
-            name = "NewPlayer";
-            health = 100;
-            damage = 5;
-            defense = 3;
+            _name = "NewPlayer";
+            _health = 100;
+            _damage = 5;
+            _defense = 3;
         }
         public Player(string nameVal, int healthVal, int damageVal, int defenseVal)
         {
-            name = nameVal;
-            health = healthVal;
-            damage = damageVal;
-            defense = defenseVal;
+            _name = nameVal;
+            _health = healthVal;
+            _damage = damageVal;
+            _defense = defenseVal;
         }
         public bool GetIsAlive()
         {
-            return health > 0;
+            return _health > 0;
         }
         public void EquipItem(Item weapon)
         {
-            damage += weapon.damage;
-            defense += weapon.defense;
+            _damage += weapon._damage;
+            _defense += weapon._defense;
         }
         public string GetName()
         {
-            return name;
+            return _name;
         }
         public void Attack(Player enemy)
         {
-            enemy.TakeDamage(damage);
+            enemy.TakeDamage(_damage);
         }
         public void Printstats()
         {
-            Console.WriteLine("Name: " + name + "\nHealth: " + health + "\n Damage: " + damage);
+            Console.WriteLine("Name: " + _name + "\nHealth: " + _health + "\n Damage: " + _damage);
         }
         public void TakeDamage(int damageVal)
         {
             if (GetIsAlive())
             {
-                health -= damageVal;
-                Console.WriteLine(name + " took" + damageVal + " damage!");
+                _health -= damageVal;
+                Console.WriteLine(_name + " took" + damageVal + " damage!");
             }
         }        
     }

@@ -7,23 +7,24 @@ namespace HelloWorld
 {
     class Item
     {
-        public int damage;
-        public int defense;
-        public int healthBoost;
-        private string itemName;        
+        private int _damage;
+        private int _defense;
+        private int _healthBoost;
+        private string _name;        
         public Item()
         {
-            damage = 0;
-            defense = 0;
-            healthBoost = 0;
-            itemName = "Useless boot";
+            _damage = 0;
+            _defense = 0;
+            _healthBoost = 0;
+            _name = "Useless boot";
         }
         public Item (string nameVal, int damageVal, int defenseVal, int healthBoostVal)
         {
-            itemName = nameVal;
-            damage = damageVal;
-            defense = defenseVal;
-            healthBoost = healthBoostVal;
+            _name = nameVal;
+            _damage = damageVal;
+            _defense = defenseVal;
+            _healthBoost = healthBoostVal;
         }
+       
     }
 }

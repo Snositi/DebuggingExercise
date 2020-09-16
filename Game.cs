@@ -14,13 +14,13 @@ namespace HelloWorld
         int spdefense = 100;
         string spname = "Undefined";
         bool singlePlayer;
+        bool multiplayerOver = false;
         bool _gameOver = false;
         int levelScaleMax = 5;
         Random random;
         private Player player1;
 
-        private Player player2;
-        private Item gameOverToken;
+        private Player player2;        
         private Item winnersToken;
         private Item armor;
         private Item healthpotion;
@@ -37,6 +37,7 @@ namespace HelloWorld
             {
                 player1 = CreateCharacter();
                 player2 = CreateCharacter();
+                MultiplayerStart();
             }
             else if (singlePlayer == true)
             {
@@ -344,23 +345,6 @@ namespace HelloWorld
 
         }
 
-        void pvpintro()
-        {
-            Console.Clear();
-            Console.WriteLine("Welcome to player versus player!");
-            Console.WriteLine("Rules are simple, you have 4 abilities,");
-            Console.WriteLine("This game continues till the winner buys an exit coin");
-            Console.WriteLine("Got it?");
-            Console.WriteLine("1. Yea");
-            Console.WriteLine("2. No");
-            Console.Write("> ");
-            Console.ReadKey();
-            Console.WriteLine("of course you do");
-            Console.WriteLine("Press any key to begin");
-            Console.ReadKey();
-            Console.Clear();
-        }
-
         //Displays the character selection menu. 
         void SelectCharacter()
         {
@@ -479,6 +463,20 @@ namespace HelloWorld
                 Console.WriteLine("Coward");
                 Console.ReadKey();
             }
+        }
+        public void MultiplayerStart()
+        {
+            Console.WriteLine("Hello " + player1.GetName() + " and " + player2.GetName() +
+                "! Welcome to the dojo, you two may fight and increase in skill for \n as long as you need! \n" +
+                "Press any key to continue");
+            Console.ReadKey();
+            while (multiplayerOver == false)
+            {
+                Console.WriteLine("Code Should Reach Here");
+                Console.ReadKey();
+
+            }
+
         }
 
         public void SelectItems(Player player)
