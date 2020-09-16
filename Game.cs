@@ -7,81 +7,45 @@ namespace HelloWorld
     //Create a turn based PvP game. It should have a battle loop where both players
     //must fight until one is dead. The game should allow players to upgrade their stats
     //using items. Both players and items should be defined as structs. 
-
-    struct Player
-    {
-        public int _health;
-        public int _damage;
-        public int _defense;        
-        public float _speed;
-        public bool _isAlive;
-        public string _name;
-        public bool hasgameendingcoin;
-    }
-
-    struct Item
-    {
-        public string itemname;
-        public int damage;
-        public int armor;
-        public float healthregen;
-    }
-    struct Ability
-    {
-        public string abilityName;
-        public int abilitydamage;
-        public int abilityregen;        
-        public int abilitydefense;
-        public int hitchance;
-        public int damagerecieved;
-    }
-
     class Game
     {
+        bool singlePlayer;
         bool _gameOver = false;                
         int levelScaleMax = 5;
         Random random;
-        Player player1;
-        Player player2;
-        Item gameOverToken;
-        Item winnersToken;
-        Item armor;
-        Item healthpotion;
-        Item cheapshot;
-        Ability SureSwing;
-        Ability HonorableSheild;
-        Ability Rest;
-        Ability BlindRage;
-        Ability LowBlow;
-        Ability MiniShield;
-        Ability GnomeTrick;
-        Ability GnomePower;
-        Ability TrollSmash;
-        Ability TrollSkin;
-        Ability TrollHeal;
-        Ability TrollLeapSmash;
-        Ability SnositiPain;
-        Ability SnositiWeakness;
-        Ability SnositiLifeSteal;
-        Ability SnositiOmegaCannon;
-        Ability SunBurn;
-        Ability HeatSheild;
-        Ability StarsNeverDie;
-        Ability SuperNova;
-        Ability SkeletonMinionSmack;
-        Ability SkeletonMinionLoyalty;
-        Ability SkeletonAbsorbMinion;
-        Ability SkeletionGiant;
+        private Player player1;
+
+        private Player player2;
+        private Item gameOverToken;
+        private Item winnersToken;
+        private Item armor;
+        private Item healthpotion;
+        private Item cheapshot;
+        private Item longsword;
+        private Item dagger;
+
+
+        
 
 
         //Run the game
         public void Run()
-        {
-            InitializePlayer();
-            Start();            
-            while (_gameOver == false)
-            {                
-                Update();
+        {   
+            InitializeItems();
+            isMultiplayer();
+            if (singlePlayer == false)
+                {
+                    player1 = CreateCharacter();
+                    player2 = CreateCharacter();
+                }            
+            else if (singlePlayer == true)
+            {
+                Start();
+            
+                while (_gameOver == false && singlePlayer == true)
+                {                   
+                    Update();
+                }
             }
             End();
         }
@@ -425,20 +389,7 @@ namespace HelloWorld
                             player1._name = "Sir Kibble";
                             player1._health = 120;
                             player1._defense = 20;
-                            player1._damage = 40;
-                            player1._speed = 20;
-                            SureSwing.abilitydamage = 8;
-                            SureSwing.abilityName = "Knight LongSword";
-                            SureSwing.hitchance = 8;
-                            HonorableSheild.abilitydefense = 10;                            
-                            HonorableSheild.abilityName = "Knights Sheild";
-                            HonorableSheild.hitchance = 7;
-                            Rest.abilityregen = 7;
-                            Rest.abilityName = "Catch Breath";
-                            Rest.hitchance = 7;
-                            BlindRage.abilitydamage = 13;
-                            BlindRage.abilityName = "Visor Down Beyblade action";
-                            BlindRage.hitchance = 0;                            
+                            player1._damage = 40;                                                   
                             //  0-9 so 0 is 10% call random number if hitchance or lower then attack if else then miss
                             break;
                         }
@@ -447,20 +398,7 @@ namespace HelloWorld
                             player1._name = "Gnojoel";
                             player1._health = 40;
                             player1._defense = 10;
-                            player1._damage = 70;
-                            player1._speed = 30;
-                            LowBlow.abilitydamage = 7;
-                            LowBlow.abilityName = "From the ground up!";
-                            LowBlow.hitchance = 8;
-                            MiniShield.abilitydefense = 6;
-                            MiniShield.abilityName = "Tiny Sheild!";
-                            MiniShield.hitchance = 7;
-                            GnomeTrick.abilityregen = 14;
-                            GnomeTrick.abilityName = "Gnome Coin Flip";
-                            GnomeTrick.hitchance = 4;
-                            GnomePower.abilitydamage = 20;
-                            GnomePower.abilityName = "Gnome Assault";
-                            GnomePower.hitchance = 2;
+                            player1._damage = 70;                           
                             break;
                         }
                     case '3':
@@ -469,7 +407,6 @@ namespace HelloWorld
                             player1._health = 200;
                             player1._defense = 30;
                             player1._damage = 25;
-                            player1._speed = 10;
                             break;
                         }
                         //If an invalid input is selected display and input message and input over again.
@@ -481,65 +418,12 @@ namespace HelloWorld
                             break;
                         }
                 }
-                Console.Clear();
-                Console.WriteLine("Please select a second player to join you");
-                Console.WriteLine("1. Snositi");
-                Console.WriteLine("2. Sentient Mass of Light");
-                Console.WriteLine("3. Necromancer");
-                Console.Write("> ");
-                char playerTwoOption = ' ';
-                while (playerTwoOption != '1' && playerTwoOption != '2' && playerTwoOption !='3')
-                {
-                    playerTwoOption = Console.ReadKey().KeyChar;
-                    switch (playerTwoOption)
-                    {
-                        case '1':
-                            player2._health = 100;
-                            player2._damage = 36;
-                            player2._defense = 27;
-                            player2._isAlive = true;
-                            player2._name = "Snosit";
-                            player2._speed = 69;
-                            break;
-                        case '2':
-                            player2._health = 1000;
-                            player2._damage = 1000;
-                            player2._defense = 1000;
-                            player2._isAlive = true;
-                            player2._name = "SentientMass of light";
-                            player2._speed = 5;
-                            break;
-                        case '3':
-                            player2._health = 80;
-                            player2._damage = 50;
-                            player2._defense = 0;
-                            player2._isAlive = true;
-                            player2._name = "Necromancer";
-                            player2._speed = 35;
-                            break;
-                        default:
-                                Console.WriteLine("Invalid input. Press any key to continue.");
-                                Console.Write("> ");
-                                Console.ReadKey();
-                                break;
-                    }
-                    Console.WriteLine("> ");
-                    Console.ReadKey();
-                    Console.Clear();
-                }
             }
-            //Prints the stats of the choosen character to the screen before the game begins to give the player visual feedback
-            PrintStats(player1._name, player1._health, player1._damage, player1._defense);
-            Console.WriteLine("Press any key to continue.");
-            Console.Write("> ");
-            Console.ReadKey();
-            Console.Clear();
+            //Prints the stats of the choosen character to the screen before the game begins to give the player visual feedback            
         }
         //Performed once when the game begins
         public void Start()
-        {
-            Player player1;
-            Player player2;
+        {         
             SelectCharacter();
             Gamble();
         }
@@ -599,13 +483,7 @@ namespace HelloWorld
             //Print game over message
             Console.WriteLine("Congratulations");
         }
-        void InitializePlayer()
-        {
-            player1._health = 69420;
-            player1._damage = 69420;
-            player1._defense = 69420;
-            player1._name = "UNDEFINED";
-        }
+        
         void Gamble()
         {
             char input;
@@ -638,5 +516,68 @@ namespace HelloWorld
             }
         }
         
+        public void SelectItems(Player player)
+        {
+            char input;
+            GetInput(out input, "LongSword", "Dagger", "Welcome! Please choose a weapon.");
+            if (input == '1')
+            {
+                player1.EquipItem(longsword);
+            }
+            else if (input == '2')
+            {
+                player1.EquipItem(dagger);
+            }
+            Console.WriteLine("Player one stats");
+            player1.PrintStats();
+            GetInput(out input, "LongSword", "Dagger", "Welcome! Please choose a weapon.");
+            if (input == '1')
+            {
+                player2.EquipItem(longsword);
+            }
+            else if (input == '2')
+            {
+                player2.EquipItem(dagger);
+            }
+            Console.WriteLine("Player two stats");
+            player1.PrintStats();
+        }
+        public Player CreateCharacter() 
+        {
+            Console.WriteLine("Hello, please type your name.");
+            string name = Console.ReadLine();
+            Player player = new Player(name, 100, 5, 3);
+            SelectItems(player);
+            return player;
+        }
+            void isMultiplayer()
+            {
+                Console.Clear();
+                char input;
+                GetInput(out input, "SinglePlayer", "Multiplayer", "What gamemode do you wish to play?");
+                if (input == '1')
+                {
+                    singlePlayer = true;
+                }
+                if (input == '2')
+                {
+                    singlePlayer = false; 
+                }
+            }
+        void InitializeItems()
+        {
+            longsword.damage = 5;
+            longsword.health = 10;
+            longsword.defense = 8;
+            longsword.name = "Knights Long Sword";
+            dagger.damage = 4;
+            dagger.health = 20;
+            dagger.defense = 0;
+            dagger.name = "Short blade of the damned";
+        }
+
+        
     }
 }
+
+
