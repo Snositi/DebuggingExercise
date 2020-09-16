@@ -14,7 +14,7 @@ namespace HelloWorld
         int spdefense = 100;
         string spname = "Undefined";
         bool singlePlayer;
-        bool _gameOver = false;                
+        bool _gameOver = false;
         int levelScaleMax = 5;
         Random random;
         private Player player1;
@@ -28,31 +28,28 @@ namespace HelloWorld
         private Item longsword;
         private Item dagger;
 
-
-        
-
-
         //Run the game
         public void Run()
-        {   
-            //InitializeItems();
+        {
+            InitializeItems();            
             isMultiplayer();
             if (singlePlayer == false)
-                {
-                    player1 = CreateCharacter();
-                    player2 = CreateCharacter();
-                }            
+            {
+                player1 = CreateCharacter();
+                player2 = CreateCharacter();
+            }
             else if (singlePlayer == true)
             {
                 Start();
-            
+
                 while (_gameOver == false && singlePlayer == true)
-                {                   
+                {
                     Update();
                 }
             }
             End();
         }
+
         //This function handles the battles for our ladder. roomNum is used to update the our opponent to be the enemy in the current room. 
         //turnCount is used to keep track of how many turns it took the player to beat the enemy
         bool StartBattle(int roomNum, ref int turnCount)
@@ -70,24 +67,24 @@ namespace HelloWorld
                 case 0:
                     {
                         enemyHealth = random.Next(60, 80);
-                        enemyAttack = random.Next(30,65);
-                        enemyDefense = random.Next(3,15);
+                        enemyAttack = random.Next(30, 65);
+                        enemyDefense = random.Next(3, 15);
                         enemyName = "Wizard";
                         break;
                     }
                 case 1:
                     {
-                        enemyHealth = random.Next(130,200);
-                        enemyAttack = random.Next(25,40);
+                        enemyHealth = random.Next(130, 200);
+                        enemyAttack = random.Next(25, 40);
                         enemyDefense = random.Next(10, 20);
                         enemyName = "Troll";
                         break;
                     }
                 case 2:
                     {
-                        
-                        enemyHealth = random.Next(200,300);
-                        enemyAttack = random.Next(40,90);
+
+                        enemyHealth = random.Next(200, 300);
+                        enemyAttack = random.Next(40, 90);
                         enemyDefense = 10;
                         enemyName = "Giant";
                         break;
@@ -95,7 +92,7 @@ namespace HelloWorld
             }
 
             //Loops until the player or the enemy is dead
-            while(sphealth > 0 && enemyHealth > 0)
+            while (sphealth > 0 && enemyHealth > 0)
             {
                 //Displays the stats for both charactersa to the screen before the player takes their turn
                 PrintStats(spname, sphealth, spdamage, spdefense);
@@ -139,8 +136,9 @@ namespace HelloWorld
                     Console.ReadKey();
                     turnCount++;
                     Console.Clear();
-                }                
-            } if (_gameOver = true || sphealth <= 0)
+                }
+            }
+            if (_gameOver == true || sphealth <= 0)
             {
                 _gameOver = true;
                 sphealth = 0;
@@ -162,7 +160,7 @@ namespace HelloWorld
         void Attack(ref int _opponentHeatlh, int opponentDefense)
         {
             int damage = spdamage - opponentDefense;
-            if(damage<0)
+            if (damage < 0)
             {
                 damage = 0;
             }
@@ -174,18 +172,18 @@ namespace HelloWorld
         {
             //Subtract the amount of turns from our maximum level scale to get our current level scale
             int scale = levelScaleMax - turnCount;
-            if(scale <= 0)
+            if (scale <= 0)
             {
                 scale = 1;
             }
             sphealth += 10 * scale;
             spdamage += 10 * scale;
-            spdefense *= scale;             
+            spdefense *= scale;
         }
-        void UpgradeStats(string option1, int option1int, string option2, int option2int,string option3)
+        void UpgradeStats(string option1, int option1int, string option2, int option2int, string option3)
         {
             bool exit = false;
-            while (exit == false)
+            while (exit == false && _gameOver == false)
             {
                 Console.Clear();
                 Console.WriteLine("ShopKeep: Welcome to my shop, traveler!");
@@ -215,12 +213,11 @@ namespace HelloWorld
                 }
                 else if (input == '3')
                 {
-                    int gambletiermultiplier = random.Next(1,10);
-                    gambletiermultiplier /= 10;
-                    int gambletierone = random.Next(0,9);
+                    int gambletiermultiplier = random.Next(1, 3);
+                    int gambletierone = random.Next(0, 9);
                     if (gambletierone == 0)
                     {
-                        Console.WriteLine("Fate has decided to increase your health by " + gambletiermultiplier + "%");                        
+                        Console.WriteLine("Fate has decided to increase your health by " + gambletiermultiplier + "%");
                         Console.WriteLine("You previously " + sphealth + "which is now");
                         int multiplyingint = sphealth *= gambletiermultiplier;
                         sphealth += multiplyingint;
@@ -230,7 +227,7 @@ namespace HelloWorld
                     }
                     else if (gambletierone == 1)
                     {
-                        Console.WriteLine("Fate has decided to increase your damage by " + gambletiermultiplier + "%");                        
+                        Console.WriteLine("Fate has decided to increase your damage by " + gambletiermultiplier + "%");
                         Console.WriteLine("You previously had " + spdamage + " player damage which is now");
                         int multiplyingint = spdamage *= gambletiermultiplier;
                         spdamage += multiplyingint;
@@ -244,12 +241,13 @@ namespace HelloWorld
                         Console.ReadKey();
                         exit = true;
                     }
-                    else if (gambletierone >= 6 && gambletierone <=9)
+                    else if (gambletierone >= 6 && gambletierone <= 9)
                     {
                         Console.WriteLine("Unfortunately fate has decided this is where you die");
                         _gameOver = true;
                         sphealth = 0;
                         Console.ReadKey();
+                        exit = true;
                     }
                     else
                         Console.WriteLine("THERE WAS ERROR");
@@ -266,7 +264,7 @@ namespace HelloWorld
         //Gets input from the player
         //Out's the char variable given. This variables stores the player's input choice.
         //The parameters option1 and option 2 displays the players current chpices to the screen
-        void GetInput(out char input,string option1, string option2)
+        void GetInput(out char input, string option1, string option2)
         {
             //Initialize input
             input = ' ';
@@ -312,17 +310,17 @@ namespace HelloWorld
             {
                 case 0:
                     {
-                        Console.WriteLine("A wizard blocks your path");       
+                        Console.WriteLine("A wizard blocks your path");
                         break;
                     }
                 case 1:
                     {
-                        Console.WriteLine("A troll stands before you");          
+                        Console.WriteLine("A troll stands before you");
                         break;
                     }
                 case 2:
                     {
-                        Console.WriteLine("A giant has appeared!");            
+                        Console.WriteLine("A giant has appeared!");
                         break;
                     }
                 default:
@@ -333,14 +331,15 @@ namespace HelloWorld
             }
             int turnCount = 0;
             //Starts a battle. If the player survived the battle, level them up and then proceed to the next room.
-           
-                if (StartBattle(roomNum, ref turnCount))
-                {
-                    UpgradeStats(turnCount);
-                    UpgradeStats("100 health", 100, "20 defense", 20, "tempt fate with the coin");
+
+            if (StartBattle(roomNum, ref turnCount))
+            {
+                UpgradeStats(turnCount);
+                UpgradeStats("100 health", 100, "20 defense", 20, "tempt fate with the coin");
+                if (_gameOver == false && sphealth > 0)
                     ClimbLadder(roomNum + 1);
-                }
-            
+            }
+
             _gameOver = true;
 
         }
@@ -361,22 +360,13 @@ namespace HelloWorld
             Console.ReadKey();
             Console.Clear();
         }
-      //  void PlayerVersusPlayer()
-     //   {
-      //      pvpintro();
-      //      
-     //       while (player1.hasgameendingcoin == false && player2.hasgameendingcoin == false)
-     //       {
-//
-     //       }
-     //   }
 
         //Displays the character selection menu. 
         void SelectCharacter()
         {
             char input = ' ';
             //Loops until a valid option is choosen
-            while(input != '1' && input != '2' && input != '3')
+            while (input != '1' && input != '2' && input != '3')
             {
                 //Prints options
                 Console.WriteLine("Welcome! Please select a character.");
@@ -393,7 +383,7 @@ namespace HelloWorld
                             spname = "Sir Kibble";
                             sphealth = 120;
                             spdefense = 20;
-                            spdamage = 40;                                                   
+                            spdamage = 40;
                             //  0-9 so 0 is 10% call random number if hitchance or lower then attack if else then miss
                             break;
                         }
@@ -402,7 +392,7 @@ namespace HelloWorld
                             spname = "Gnojoel";
                             sphealth = 40;
                             spdefense = 10;
-                            spdamage = 70;                           
+                            spdamage = 70;
                             break;
                         }
                     case '3':
@@ -413,7 +403,7 @@ namespace HelloWorld
                             spdamage = 25;
                             break;
                         }
-                        //If an invalid input is selected display and input message and input over again.
+                    //If an invalid input is selected display and input message and input over again.
                     default:
                         {
                             Console.WriteLine("Invalid input. Press any key to continue.");
@@ -427,7 +417,7 @@ namespace HelloWorld
         }
         //Performed once when the game begins
         public void Start()
-        {         
+        {
             SelectCharacter();
             Gamble();
         }
@@ -435,38 +425,9 @@ namespace HelloWorld
         //Repeated until the game ends
         public void Update()
         {
-            bool singleplayer = true;
-            Console.WriteLine("Would you like to participate in the multiplayer feature or singleplayer?");
-            Console.WriteLine("*Player 2 will not participate at all in singleplayer*");
-            Console.WriteLine("1. SinglePlayer");
-            Console.WriteLine("2. Multiplayer");
-            Console.Write("> ");
-            char input = '6';
-            while (input != '1' && input != '2')
+            if (sphealth > 0 && singlePlayer == true)
             {
-                input = Console.ReadKey().KeyChar;
-                switch (input)
-                {
-                    case '1':
-                        singleplayer = true;
-                        break;
-                    case '2':
-                        singleplayer = false;
-                        break;
-                    default:
-                        Console.WriteLine("Please select a valid option ");
-                        break;
-                }
-                if (sphealth > 0 && singleplayer == true)
-                {
-                    ClimbLadder(0);
-                }
-              //  else if (GetIsAlive() && player2._health > 0 && singleplayer == false)
-              //  {
-              //      player1.hasgameendingcoin = false;
-              //      player2.hasgameendingcoin = false;
-              //      PlayerVersusPlayer();
-              //  }
+                ClimbLadder(0);
             }
         }
 
@@ -487,7 +448,7 @@ namespace HelloWorld
             //Print game over message
             Console.WriteLine("Congratulations");
         }
-        
+
         void Gamble()
         {
             char input;
@@ -519,7 +480,7 @@ namespace HelloWorld
                 Console.ReadKey();
             }
         }
-        
+
         public void SelectItems(Player player)
         {
             char input;
@@ -533,7 +494,7 @@ namespace HelloWorld
                 player1.EquipItem(dagger);
             }
             Console.WriteLine("Player one stats");
-           // player1.PrintStats();
+            // player1.PrintStats();
             GetInput(out input, "LongSword", "Dagger", "Welcome! Please choose a weapon.");
             if (input == '1')
             {
@@ -544,9 +505,9 @@ namespace HelloWorld
                 player2.EquipItem(dagger);
             }
             Console.WriteLine("Player two stats");
-         //   player1.PrintStats();
+            //   player1.PrintStats();
         }
-        public Player CreateCharacter() 
+        public Player CreateCharacter()
         {
             Console.WriteLine("Hello, please type your name.");
             string name = Console.ReadLine();
@@ -554,33 +515,30 @@ namespace HelloWorld
             SelectItems(player);
             return player;
         }
-            void isMultiplayer()
+        void isMultiplayer()
+        {
+            Console.Clear();
+            char input;
+            GetInput(out input, "SinglePlayer", "Multiplayer", "What gamemode do you wish to play?");
+            if (input == '1')
             {
-                Console.Clear();
-                char input;
-                GetInput(out input, "SinglePlayer", "Multiplayer", "What gamemode do you wish to play?");
-                if (input == '1')
-                {
-                    singlePlayer = true;
-                }
-                if (input == '2')
-                {
-                    singlePlayer = false; 
-                }
+                singlePlayer = true;
             }
-       // void InitializeItems()
-       // {
-       //     longsword.damage = 5;
-       //     longsword.health = 10;
-       //     longsword.defense = 8;
-       //     longsword.itemName = "Knights Long Sword";
-       //     dagger.damage = 4;
-       //     dagger.health = 20;
-       //     dagger.defense = 0;
-       //     dagger.itemName = "Short blade of the damned";
-       // }
-
-        
+            if (input == '2')
+            {
+                singlePlayer = false;
+            }
+        }
+        void InitializeItems()
+        {
+            dagger = CreateItem("dagger", 5, 25, 5);
+            longsword = CreateItem("longsword", 10, 10, 10);
+        }
+        public Item CreateItem(string name, int damage, int health, int defense)
+        {
+            Item item = new Item(name, damage, health, defense);
+            return item;
+        }
     }
 }
 

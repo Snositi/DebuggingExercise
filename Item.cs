@@ -9,16 +9,16 @@ namespace HelloWorld
     {
         public int damage;
         public int defense;
-        private int healthBoost;
+        public int healthBoost;
         private string itemName;        
-        Item()
+        public Item()
         {
             damage = 0;
             defense = 0;
             healthBoost = 0;
             itemName = "Useless boot";
         }
-        Item (string nameVal, int damageVal, int defenseVal, int healthBoostVal)
+        public Item (string nameVal, int damageVal, int defenseVal, int healthBoostVal)
         {
             itemName = nameVal;
             damage = damageVal;
