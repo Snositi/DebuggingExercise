@@ -18,9 +18,8 @@ namespace HelloWorld
         bool _gameOver = false;
         int levelScaleMax = 5;
         Random random;
-        private Player player1;
-
-        private Player player2;        
+        private Player _player1;
+        private Player _player2;        
         private Item winnersToken;
         private Item armor;
         private Item healthpotion;
@@ -35,8 +34,8 @@ namespace HelloWorld
             isMultiplayer();
             if (singlePlayer == false)
             {
-                player1 = CreateCharacter();
-                player2 = CreateCharacter();
+                _player1 = CreateCharacter();
+                _player2 = CreateCharacter();
                 MultiplayerStart();
             }
             else if (singlePlayer == true)
@@ -466,7 +465,7 @@ namespace HelloWorld
         }
         public void MultiplayerStart()
         {
-            Console.WriteLine("Hello " + player1.GetName() + " and " + player2.GetName() +
+            Console.WriteLine("Hello " + _player1.GetName() + " and " + _player2.GetName() +
                 "! Welcome to the dojo, you two may fight and increase in skill for \n as long as you need! \n" +
                 "Press any key to continue");
             Console.ReadKey();
@@ -485,22 +484,22 @@ namespace HelloWorld
             GetInput(out input, "LongSword", "Dagger", "Welcome! Please choose a weapon.");
             if (input == '1')
             {
-                player1.EquipItem(longsword);
+                _player1.EquipItem(longsword);
             }
             else if (input == '2')
             {
-                player1.EquipItem(dagger);
+                _player1.EquipItem(dagger);
             }
             Console.WriteLine("Player one stats");
             // player1.PrintStats();
             GetInput(out input, "LongSword", "Dagger", "Welcome! Please choose a weapon.");
             if (input == '1')
             {
-                player2.EquipItem(longsword);
+                _player2.EquipItem(longsword);
             }
             else if (input == '2')
             {
-                player2.EquipItem(dagger);
+                _player2.EquipItem(dagger);
             }
             Console.WriteLine("Player two stats");
             //   player1.PrintStats();

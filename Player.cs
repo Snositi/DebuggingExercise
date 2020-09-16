@@ -30,8 +30,8 @@ namespace HelloWorld
         }
         public void EquipItem(Item weapon)
         {
-            _damage += weapon._damage;
-            _defense += weapon._defense;
+            _damage += weapon.GetDamage();
+            _defense += weapon.GetDefense();
         }
         public string GetName()
         {
