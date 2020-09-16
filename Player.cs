@@ -32,6 +32,7 @@ namespace HelloWorld
         {
             _damage += weapon.GetDamage();
             _defense += weapon.GetDefense();
+            _health += weapon.GetHealthBoost();            
         }
         public string GetName()
         {

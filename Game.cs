@@ -34,8 +34,10 @@ namespace HelloWorld
             isMultiplayer();
             if (singlePlayer == false)
             {
+                Console.WriteLine(":Player one:");
                 _player1 = CreateCharacter();
                 SelectItems(_player1);
+                Console.WriteLine(":Player two:");
                 _player2 = CreateCharacter();
                 SelectItems(_player2);
                 MultiplayerStart();
@@ -473,7 +475,7 @@ namespace HelloWorld
             Console.ReadKey();
             while (multiplayerOver == false)
             {
-                Console.WriteLine("Code Should Reach Here");
+                Console.WriteLine("");
                 Console.ReadKey();
 
             }
@@ -495,7 +497,9 @@ namespace HelloWorld
             }
             Console.WriteLine("Player stats");
             player.Printstats();
-            
+            Console.WriteLine("press any key to continue");
+            Console.ReadKey();
+            Console.Clear();
         }
         public Player CreateCharacter()
         {
@@ -503,6 +507,7 @@ namespace HelloWorld
             string name = Console.ReadLine();
             Player player = new Player(name, 100, 5, 3);
             return player;
+            Console.Clear();
         }
         void isMultiplayer()
         {
@@ -512,10 +517,12 @@ namespace HelloWorld
             if (input == '1')
             {
                 singlePlayer = true;
+                Console.Clear();
             }
             if (input == '2')
             {
                 singlePlayer = false;
+                Console.Clear();
             }
         }
         void InitializeItems()
