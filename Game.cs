@@ -9,6 +9,10 @@ namespace HelloWorld
     //using items. Both players and items should be defined as structs. 
     class Game
     {
+        int sphealth = 100;
+        int spdamage = 100;
+        int spdefense = 100;
+        string spname = "Undefined";
         bool singlePlayer;
         bool _gameOver = false;                
         int levelScaleMax = 5;
@@ -31,7 +35,7 @@ namespace HelloWorld
         //Run the game
         public void Run()
         {   
-            InitializeItems();
+            //InitializeItems();
             isMultiplayer();
             if (singlePlayer == false)
                 {
@@ -91,10 +95,10 @@ namespace HelloWorld
             }
 
             //Loops until the player or the enemy is dead
-            while(player1._health > 0 && enemyHealth > 0)
+            while(sphealth > 0 && enemyHealth > 0)
             {
                 //Displays the stats for both charactersa to the screen before the player takes their turn
-                PrintStats(player1._name, player1._health, player1._damage, player1._defense);
+                PrintStats(spname, sphealth, spdamage, spdefense);
                 PrintStats(enemyName, enemyHealth, enemyAttack, enemyDefense);
 
                 //Get input from the player
@@ -104,14 +108,14 @@ namespace HelloWorld
                 if (input == '1')
                 {
                     Attack(ref enemyHealth, enemyDefense);
-                    Console.WriteLine("You dealt " + player1._damage + " damage. But " + enemyName + " blocked " + enemyDefense + "!");
+                    Console.WriteLine("You dealt " + spdamage + " damage. But " + enemyName + " blocked " + enemyDefense + "!");
                     Console.Write("> ");
                     turnCount++;
                     Console.ReadKey();
                     //After the player attacks, the enemy takes its turn. Since the player decided not to defend, the block attack function is not called.
                     if (enemyHealth > 0)
                     {
-                        player1._health -= enemyAttack;
+                        sphealth -= enemyAttack;
                         Console.WriteLine(enemyName + " dealt " + enemyAttack + " damage.");
                         Console.Write("> ");
                         Console.ReadKey();
@@ -129,20 +133,20 @@ namespace HelloWorld
                 //called instead of simply decrementing the health by the enemy's attack value.
                 else if (input == '2')
                 {
-                    BlockAttack(player1._health, enemyAttack, player1._defense);
-                    Console.WriteLine(enemyName + " dealt " + enemyAttack + " damage.But you blocked " + player1._defense);
+                    BlockAttack(sphealth, enemyAttack, spdefense);
+                    Console.WriteLine(enemyName + " dealt " + enemyAttack + " damage.But you blocked " + spdefense);
                     Console.Write("> ");
                     Console.ReadKey();
                     turnCount++;
                     Console.Clear();
                 }                
-            } if (_gameOver = true || player1._health <= 0)
+            } if (_gameOver = true || sphealth <= 0)
             {
                 _gameOver = true;
-                player1._health = 0;
+                sphealth = 0;
             }
             //Return whether or not our player died
-            return player1._health != 0;
+            return sphealth != 0;
 
         }
         //Decrements the health of a character. The attack value is subtracted by that character's defense
@@ -153,11 +157,11 @@ namespace HelloWorld
             {
                 damage = 0;
             }
-            player1._health -= damage;
+            sphealth -= damage;
         }
         void Attack(ref int _opponentHeatlh, int opponentDefense)
         {
-            int damage = player1._damage - opponentDefense;
+            int damage = spdamage - opponentDefense;
             if(damage<0)
             {
                 damage = 0;
@@ -174,9 +178,9 @@ namespace HelloWorld
             {
                 scale = 1;
             }
-            player1._health += 10 * scale;
-            player1._damage += 10 * scale;
-            player1._defense *= scale;             
+            sphealth += 10 * scale;
+            spdamage += 10 * scale;
+            spdefense *= scale;             
         }
         void UpgradeStats(string option1, int option1int, string option2, int option2int,string option3)
         {
@@ -193,7 +197,7 @@ namespace HelloWorld
                 input = Console.ReadKey().KeyChar;
                 if (input == '1')
                 {
-                    player1._health += option1int;
+                    sphealth += option1int;
                     Console.WriteLine("You just bought " + option1 + "!");
                     Console.WriteLine("Goodbye!!");
                     Console.ReadKey();
@@ -202,7 +206,7 @@ namespace HelloWorld
                 }
                 else if (input == '2')
                 {
-                    player1._defense += option2int;
+                    spdefense += option2int;
                     Console.WriteLine("You just bought " + option2 + "!");
                     Console.WriteLine("Goodbye!!");
                     Console.ReadKey();
@@ -217,20 +221,20 @@ namespace HelloWorld
                     if (gambletierone == 0)
                     {
                         Console.WriteLine("Fate has decided to increase your health by " + gambletiermultiplier + "%");                        
-                        Console.WriteLine("You previously " + player1._health + "which is now");
-                        int multiplyingint = player1._health *= gambletiermultiplier;
-                        player1._health += multiplyingint;
-                        Console.Write(player1._health);
+                        Console.WriteLine("You previously " + sphealth + "which is now");
+                        int multiplyingint = sphealth *= gambletiermultiplier;
+                        sphealth += multiplyingint;
+                        Console.Write(sphealth);
                         Console.ReadKey();
                         exit = true;
                     }
                     else if (gambletierone == 1)
                     {
                         Console.WriteLine("Fate has decided to increase your damage by " + gambletiermultiplier + "%");                        
-                        Console.WriteLine("You previously had " + player1._damage + " player damage which is now");
-                        int multiplyingint = player1._damage *= gambletiermultiplier;
-                        player1._damage += multiplyingint;
-                        Console.Write(player1._damage);
+                        Console.WriteLine("You previously had " + spdamage + " player damage which is now");
+                        int multiplyingint = spdamage *= gambletiermultiplier;
+                        spdamage += multiplyingint;
+                        Console.Write(spdamage);
                         Console.ReadKey();
                         exit = true;
                     }
@@ -244,7 +248,7 @@ namespace HelloWorld
                     {
                         Console.WriteLine("Unfortunately fate has decided this is where you die");
                         _gameOver = true;
-                        player1._health = 0;
+                        sphealth = 0;
                         Console.ReadKey();
                     }
                     else
@@ -357,15 +361,15 @@ namespace HelloWorld
             Console.ReadKey();
             Console.Clear();
         }
-        void PlayerVersusPlayer()
-        {
-            pvpintro();
-            
-            while (player1.hasgameendingcoin == false && player2.hasgameendingcoin == false)
-            {
-
-            }
-        }
+      //  void PlayerVersusPlayer()
+     //   {
+      //      pvpintro();
+      //      
+     //       while (player1.hasgameendingcoin == false && player2.hasgameendingcoin == false)
+     //       {
+//
+     //       }
+     //   }
 
         //Displays the character selection menu. 
         void SelectCharacter()
@@ -386,27 +390,27 @@ namespace HelloWorld
                 {
                     case '1':
                         {
-                            player1._name = "Sir Kibble";
-                            player1._health = 120;
-                            player1._defense = 20;
-                            player1._damage = 40;                                                   
+                            spname = "Sir Kibble";
+                            sphealth = 120;
+                            spdefense = 20;
+                            spdamage = 40;                                                   
                             //  0-9 so 0 is 10% call random number if hitchance or lower then attack if else then miss
                             break;
                         }
                     case '2':
                         {
-                            player1._name = "Gnojoel";
-                            player1._health = 40;
-                            player1._defense = 10;
-                            player1._damage = 70;                           
+                            spname = "Gnojoel";
+                            sphealth = 40;
+                            spdefense = 10;
+                            spdamage = 70;                           
                             break;
                         }
                     case '3':
                         {
-                            player1._name = "Joedazz";
-                            player1._health = 200;
-                            player1._defense = 30;
-                            player1._damage = 25;
+                            spname = "Joedazz";
+                            sphealth = 200;
+                            spdefense = 30;
+                            spdamage = 25;
                             break;
                         }
                         //If an invalid input is selected display and input message and input over again.
@@ -453,16 +457,16 @@ namespace HelloWorld
                         Console.WriteLine("Please select a valid option ");
                         break;
                 }
-                if (player1._health > 0 && singleplayer == true)
+                if (sphealth > 0 && singleplayer == true)
                 {
                     ClimbLadder(0);
                 }
-                else if (player1._health > 0 && player2._health > 0 && singleplayer == false)
-                {
-                    player1.hasgameendingcoin = false;
-                    player2.hasgameendingcoin = false;
-                    PlayerVersusPlayer();
-                }
+              //  else if (GetIsAlive() && player2._health > 0 && singleplayer == false)
+              //  {
+              //      player1.hasgameendingcoin = false;
+              //      player2.hasgameendingcoin = false;
+              //      PlayerVersusPlayer();
+              //  }
             }
         }
 
@@ -470,7 +474,7 @@ namespace HelloWorld
         public void End()
         {
             //If the player died print death message
-            if (player1._health <= 0)
+            if (sphealth <= 0)
             {
                 Console.WriteLine("Failure");
                 return;
@@ -487,7 +491,7 @@ namespace HelloWorld
         void Gamble()
         {
             char input;
-            Console.WriteLine("Are ya feeling lucky " + player1._name + "?");
+            Console.WriteLine("Are ya feeling lucky " + spname + "?");
             GetInput(out input, "Flip Coin", "Not Really");
             if (input == '1')
             {
@@ -496,8 +500,8 @@ namespace HelloWorld
                 if (randomNumber >= 500)
                 {
                     Console.WriteLine("Heads, huh, that doesn't happen often, ok well here's bonus damage I suppose.");
-                    player1._damage += 15;
-                    Console.WriteLine("You gained 15 damage points for a total of " + player1._damage + "!");
+                    spdamage += 15;
+                    Console.WriteLine("You gained 15 damage points for a total of " + spdamage + "!");
                     Console.ReadKey();
                     Console.Clear();
                 }
@@ -529,7 +533,7 @@ namespace HelloWorld
                 player1.EquipItem(dagger);
             }
             Console.WriteLine("Player one stats");
-            player1.PrintStats();
+           // player1.PrintStats();
             GetInput(out input, "LongSword", "Dagger", "Welcome! Please choose a weapon.");
             if (input == '1')
             {
@@ -540,7 +544,7 @@ namespace HelloWorld
                 player2.EquipItem(dagger);
             }
             Console.WriteLine("Player two stats");
-            player1.PrintStats();
+         //   player1.PrintStats();
         }
         public Player CreateCharacter() 
         {
@@ -564,17 +568,17 @@ namespace HelloWorld
                     singlePlayer = false; 
                 }
             }
-        void InitializeItems()
-        {
-            longsword.damage = 5;
-            longsword.health = 10;
-            longsword.defense = 8;
-            longsword.name = "Knights Long Sword";
-            dagger.damage = 4;
-            dagger.health = 20;
-            dagger.defense = 0;
-            dagger.name = "Short blade of the damned";
-        }
+       // void InitializeItems()
+       // {
+       //     longsword.damage = 5;
+       //     longsword.health = 10;
+       //     longsword.defense = 8;
+       //     longsword.itemName = "Knights Long Sword";
+       //     dagger.damage = 4;
+       //     dagger.health = 20;
+       //     dagger.defense = 0;
+       //     dagger.itemName = "Short blade of the damned";
+       // }
 
         
     }

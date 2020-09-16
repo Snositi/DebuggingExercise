@@ -7,10 +7,10 @@ namespace HelloWorld
 {
     class Item
     {
-        private int damage;
-        private int defense;
+        public int damage;
+        public int defense;
         private int healthBoost;
-        private string itemName;
+        private string itemName;        
         Item()
         {
             damage = 0;

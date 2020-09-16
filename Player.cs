@@ -10,14 +10,14 @@ namespace HelloWorld
         private int health;
         private int damage;
         private int defense;
-        Player()
+        public Player()
         {
             name = "NewPlayer";
             health = 100;
             damage = 5;
             defense = 3;
         }
-        Player(string nameVal, int healthVal, int damageVal, int defenseVal)
+        public Player(string nameVal, int healthVal, int damageVal, int defenseVal)
         {
             name = nameVal;
             health = healthVal;
@@ -39,7 +39,7 @@ namespace HelloWorld
         }
         public void Attack(Player enemy)
         {
-            enemy.Takedamage(damage);
+            enemy.TakeDamage(damage);
         }
         public void Printstats()
         {
@@ -50,7 +50,7 @@ namespace HelloWorld
             if (GetIsAlive())
             {
                 health -= damageVal;
-                Console.WriteLine(_name + " took" + damageVal + " damage!");
+                Console.WriteLine(name + " took" + damageVal + " damage!");
             }
         }        
     }
